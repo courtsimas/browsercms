@@ -49,13 +49,17 @@ module Cms
 
         # copy new instance variables to the template
         %w[page mode show_page_toolbar].each do |v|
-          @template.instance_variable_set("@#{v}", instance_variable_get("@#{v}"))
+          unless v.nil?
+            @template.instance_variable_set("@#{v}", instance_variable_get("@#{v}"))
+          end
         end
 
         # clear out any content already captured
         # by previous attempts to render the page within this request
         @template.instance_variables.select{|v| v =~ /@content_for_/ }.each do |v|
-          @template.instance_variable_set("#{v}", nil)
+          unless v.nil?
+            @template.instance_variable_set("#{v}", nil)
+          end
         end
 
         prepare_connectables_for_render
